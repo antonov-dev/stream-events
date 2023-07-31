@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\GenerateEvents;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -40,6 +41,9 @@ class SocialAuthController extends Controller
             ]);
 
             Auth::login($user);
+
+            // Seed events for user
+            GenerateEvents::dispatch($user);
         }
 
         return redirect('/spa');
