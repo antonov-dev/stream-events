@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialAuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +19,15 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/spa');
 
 Route::get('/spa/{any?}', function () {
-    return view('app');
+    return view('app', [
+        'initialData' => [
+            'isAuthenticated' => Auth::check()
+        ]
+    ]);
 })->where('any', '.*');
+
+Route::get('/social-auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+Route::get('/social-auth/{provider}/callback', [SocialAuthController::class, 'callback']);
+
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
