@@ -13,7 +13,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        // Seed events for user
+        // Clear events for user
         ClearEvents::dispatch(Auth::user());
 
         Auth::guard('web')->logout();

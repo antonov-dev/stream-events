@@ -42,7 +42,7 @@ class SocialAuthController extends Controller
 
             Auth::login($user);
 
-            // Seed events for user
+            // Generate events for user
             GenerateEvents::dispatch($user);
         }
 
