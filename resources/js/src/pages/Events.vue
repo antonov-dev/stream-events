@@ -1,13 +1,15 @@
 <script>
 import {defineComponent} from 'vue'
+import EventsList from "@/src/components/EventsList.vue";
 
 export default defineComponent({
-    name: "Events"
+    name: "Events",
+    components: {EventsList}
 })
 </script>
 
 <template>
-    <h1>Events</h1>
+    <EventsList />
 </template>
 
 <style scoped>

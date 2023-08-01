@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Donation;
+use App\Models\Event;
 use App\Models\Follower;
 use App\Models\MerchSale;
 use App\Models\Subscriber;
@@ -40,5 +41,6 @@ class ClearEvents implements ShouldQueue
         Follower::where('user_id', $this->user->id)->truncate();
         MerchSale::where('user_id', $this->user->id)->truncate();
         Subscriber::where('user_id', $this->user->id)->truncate();
+        Event::where('user_id', $this->user->id)->truncate();
     }
 }

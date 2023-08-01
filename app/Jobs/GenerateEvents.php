@@ -36,9 +36,44 @@ class GenerateEvents implements ShouldQueue
     public function handle(): void
     {
         // Generate new events for given user
-        Donation::factory()->count(500)->create(['user_id' => $this->user->id]);
-        Follower::factory()->count(500)->create(['user_id' => $this->user->id]);
-        MerchSale::factory()->count(500)->create(['user_id' => $this->user->id]);
-        Subscriber::factory()->count(500)->create(['user_id' => $this->user->id]);
+        Donation::factory()->count(500)
+            ->afterCreating(function ($model) {
+                $model->event()->create([
+                    'user_id' => $model->user_id,
+                    'created_at' => $model->created_at,
+                    'updated_at' => $model->updated_at,
+                ]);
+            })
+            ->create(['user_id' => $this->user->id]);
+
+        Follower::factory()->count(500)
+            ->afterCreating(function ($model) {
+                $model->event()->create([
+                    'user_id' => $model->user_id,
+                    'created_at' => $model->created_at,
+                    'updated_at' => $model->updated_at,
+                ]);
+            })
+            ->create(['user_id' => $this->user->id]);
+
+        MerchSale::factory()->count(500)
+            ->afterCreating(function ($model) {
+                $model->event()->create([
+                    'user_id' => $model->user_id,
+                    'created_at' => $model->created_at,
+                    'updated_at' => $model->updated_at,
+                ]);
+            })
+            ->create(['user_id' => $this->user->id]);
+
+        Subscriber::factory()->count(500)
+            ->afterCreating(function ($model) {
+                $model->event()->create([
+                    'user_id' => $model->user_id,
+                    'created_at' => $model->created_at,
+                    'updated_at' => $model->updated_at,
+                ]);
+            })
+            ->create(['user_id' => $this->user->id]);
     }
 }

@@ -16,7 +16,7 @@ export default defineComponent({
 
 <template>
     <div class="container">
-        <AppNavigation/>
+        <AppNavigation />
 
         <router-view />
     </div>
