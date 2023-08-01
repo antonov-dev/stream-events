@@ -2,7 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Helpers\Payments\Currency;
+use App\Modules\Payments\Converters\CurrencyConverter;
+use App\Modules\Payments\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +19,17 @@ class DonationFactory extends Factory
     public function definition(): array
     {
         $date = fake()->dateTimeBetween('-3 months');
+        $amount = fake()->randomFloat(2, 5, 100);
+        $currency = collect(Currency::all())->values()->random();
+
+        /** @var CurrencyConverter $converter */
+        $converter = resolve(CurrencyConverter::class);
 
         return [
-            'amount' => fake()->randomFloat(2, 5, 100),
+            'amount' => $amount,
+            'amount_usd' => $converter->convert($amount, $currency, Currency::USD),
             'message' => fake()->text(150),
-            'currency' => collect(Currency::all())->values()->random(),
+            'currency' => $currency,
             'user_id' => 1,
             'created_at' => $date,
             'updated_at' => $date

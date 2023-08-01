@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedDecimal('amount', 10)->index();
+            $table->unsignedDecimal('amount', 10);
+            $table->unsignedDecimal('amount_usd', 10)->index();
             $table->tinyText('message')->nullable()->default(null);
-            $table->string('currency')->index();
-            $table->unsignedInteger('user_id')->index();
+            $table->string('currency');
+            $table->unsignedInteger('user_id');
 
             $table->timestamps();
-            $table->index('created_at');
+
+            $table->index(['user_id', 'created_at']);
         });
     }
 

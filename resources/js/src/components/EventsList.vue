@@ -70,7 +70,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="my-3 p-3">
+    <div class="my-5">
         <h6 class="border-bottom pb-1 mb-3">Events</h6>
 
         <div v-if="!isLoading" v-for="event in events">

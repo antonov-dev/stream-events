@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\Payments;
+namespace App\Modules\Payments;
 
 use Illuminate\Support\Facades\Cache;
 use ReflectionClass;
@@ -11,6 +11,11 @@ class Currency
     const CAD = 'CAD';
     const EUR = 'EUR';
 
+
+    /**
+     * Returns all available currencies
+     * @return mixed
+     */
     public static function all()
     {
         return Cache::remember('se:cur', 5 * 60, function () {

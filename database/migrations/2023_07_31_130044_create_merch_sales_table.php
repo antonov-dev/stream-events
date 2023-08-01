@@ -16,12 +16,14 @@ return new class extends Migration
 
             $table->string('name');
             $table->unsignedInteger('amount')->index();
-            $table->unsignedDecimal('price', 10)->index();
-            $table->string('currency')->index();
-            $table->unsignedInteger('user_id')->index();
+            $table->unsignedDecimal('price', 10);
+            $table->unsignedDecimal('price_usd', 10)->index();
+            $table->string('currency');
+            $table->unsignedInteger('user_id');
 
             $table->timestamps();
-            $table->index('created_at');
+
+            $table->index(['user_id', 'created_at']);
         });
     }
 

@@ -18,6 +18,7 @@ class Donation extends Model
      */
     protected $fillable = [
         'amount',
+        'amount_usd',
         'message',
         'currency',
         'user_id'

@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
 
-            $table->string('eventable_type')->index();
-            $table->unsignedInteger('eventable_id')->index();
-            $table->unsignedInteger('user_id')->index();
-            $table->boolean('is_read')->default(false)->index();
+            $table->string('eventable_type');
+            $table->unsignedInteger('eventable_id');
+            $table->unsignedInteger('user_id');
+            $table->boolean('is_read')->default(false);
 
             $table->timestamps();
 
-            $table->index('created_at');
+            $table->index(['user_id', 'created_at']);
         });
     }
 

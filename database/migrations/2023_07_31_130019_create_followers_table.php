@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->unsignedInteger('user_id')->index();
+            $table->unsignedInteger('user_id');
 
             $table->timestamps();
-            $table->index('created_at');
+
+            $table->index(['user_id', 'created_at']);
         });
     }
 

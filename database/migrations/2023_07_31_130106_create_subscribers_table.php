@@ -19,7 +19,8 @@ return new class extends Migration
             $table->unsignedInteger('user_id')->index();
 
             $table->timestamps();
-            $table->index('created_at');
+
+            $table->index(['user_id', 'created_at']);
         });
     }
 

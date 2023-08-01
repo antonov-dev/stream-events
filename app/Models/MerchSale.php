@@ -20,6 +20,7 @@ class MerchSale extends Model
         'name',
         'amount',
         'price',
+        'price_usd',
         'currency',
         'user_id'
     ];
