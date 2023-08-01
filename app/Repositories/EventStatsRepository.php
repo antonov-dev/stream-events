@@ -52,13 +52,13 @@ class EventStatsRepository
      * Returns total revenue for given user
      * @param int $days
      * @param array $subscriptionTierPrice
-     * @return array
+     * @return array|null
      */
-    public function getTotalRevenue(int $days, array $subscriptionTierPrice): array
+    public function getTotalRevenue(int $days, array $subscriptionTierPrice): ?array
     {
         $key = 'stats:tr:' . $this->user->id;
 
-        if(Cache::has($key)) {
+        if (Cache::has($key)) {
             $total = Cache::get($key);
         } else {
             $total = Donation::where('user_id', $this->user->id)
@@ -84,23 +84,23 @@ class EventStatsRepository
                     ->where('tier_id', Subscriber::TIER_3)
                     ->count() * $subscriptionTierPrice[Subscriber::TIER_3];
 
-            if($total) {
+            if ($total) {
                 Cache::tags('events:' . $this->user->id)->put($key, $total, $this->ttl);
             }
         }
 
-        return [
-            'amount' => number_format($total, 2),
-            'currency' => Currency::USD
-        ];
+
+        return $total
+            ? ['amount' => number_format($total, 2), 'currency' => Currency::USD]
+            : null;
     }
 
     /**
      * Returns total number of followers
      * @param int $days
-     * @return int
+     * @return int|null
      */
-    public function getTotalFollowers(int $days): int
+    public function getTotalFollowers(int $days): ?int
     {
         $key = 'stats:tf:' . $this->user->id;
 
@@ -116,15 +116,15 @@ class EventStatsRepository
             }
         }
 
-        return $total;
+        return $total ?: null;
     }
 
     /**
      * Returns best merchant sale
      * @param int $days
-     * @return mixed
+     * @return array|null
      */
-    public function getBestMerchSales(int $days): mixed
+    public function getBestMerchSales(int $days): ?array
     {
         $key = 'stats:bms:' . $this->user->id;
 
@@ -137,9 +137,13 @@ class EventStatsRepository
                 ->take(3)
                 ->get();
 
-            $result = MerchSaleResource::collection($result);
+            $result = MerchSaleResource::collection($result)->all();
+
+            if($result) {
+                Cache::tags('events:' . $this->user->id)->put($key, $result, $this->ttl);
+            }
         }
 
-        return $result;
+        return count($result) ? $result : null;
     }
 }

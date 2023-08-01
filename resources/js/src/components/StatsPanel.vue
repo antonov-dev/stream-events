@@ -14,7 +14,8 @@ export default {
             await axios
                 .get(window.location.origin + import.meta.env.VITE_API_URL +'/event-stats')
                 .then((response) => {
-                    if(response.data.status === 'success' && response.data.data) {
+                    if(response.data.status === 'success'
+                        && (response.data.data.best_merch_sales || response.data.data.total_followers || response.data.data.total_revenue)) {
                         this.stats = response.data.data;
                         this.isLoaded = true;
                     }
@@ -26,6 +27,13 @@ export default {
     },
     mounted() {
         this.getStats();
+
+        // Try to load one more time if DB seeding will take to much
+        setTimeout(() => {
+            if(!this.isLoaded) {
+                this.getStats();
+            }
+        }, 15000);
     }
 }
 </script>
