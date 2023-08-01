@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetEventsRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use App\Traits\ApiResponse;
@@ -26,8 +27,9 @@ class EventsController extends Controller
         $key = 'events:' . $request->user()->id . ':' . $request->last . ':' . $request->limit;
         $ttl = 5 * 60;
 
-        $result = Cache::remember($key, $ttl, function () use ($request) {
-
+        if(Cache::has($key)) {
+            $result = Cache::get($key);
+        } else {
             // Retrieve events from events table
             $events = Event::where('user_id', $request->user()->id)
                 ->whereRaw('created_at > FROM_UNIXTIME("'.$request->last.'")')
@@ -43,18 +45,35 @@ class EventsController extends Controller
             }
 
             // Add related event instance and prepare for json output
-            return $events->map(function ($item) use ($groupedEvents) {
+            $result = $events->map(function ($item) use ($groupedEvents) {
                 $item->eventable = $groupedEvents[$item->eventable_type][$item->eventable_id];
                 return new EventResource($item);
             })->all();
-        });
 
-        // Remove cache for first run when seeding is not finished yet
-        if(!$result) {
-            Cache::forget($key);
+            if($result) {
+                Cache::tags('events:' . $request->user()->id)->put($key, $result, $ttl);
+            }
         }
 
         return $this->success($result);
+    }
+
+    /**
+     * Update event
+     * @param UpdateEventRequest $request
+     * @param Event $event
+     * @return JsonResponse
+     */
+    public function update(UpdateEventRequest $request, Event $event)
+    {
+        $request->validated($request->all());
+
+        $event->update($request->only(['is_read']));
+
+        // Remove cached data for user
+        Cache::tags('events:' . $request->user()->id)->flush();
+
+        return $this->success([], 'Event successfully updated');
     }
 
     /**

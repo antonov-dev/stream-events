@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('eventable_type')->index();
             $table->unsignedInteger('eventable_id')->index();
             $table->unsignedInteger('user_id')->index();
+            $table->boolean('is_read')->default(false)->index();
 
             $table->timestamps();
 

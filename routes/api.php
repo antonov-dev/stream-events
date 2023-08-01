@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/events', [EventsController::class, 'index']);
+Route::middleware('auth:sanctum')->patch('/events/{event}', [EventsController::class, 'update']);

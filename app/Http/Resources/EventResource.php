@@ -20,9 +20,10 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
+            'type' => Str::snake(array_pop($type)),
+            'is_read' => $this->is_read,
             'created_at' => $this->created_at->toDateTimeString(),
             'created_timestamp' => $this->created_at->timestamp,
-            'type' => Str::snake(array_pop($type)),
             'eventable' => $this->eventable
         ];
     }

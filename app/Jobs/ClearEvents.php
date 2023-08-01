@@ -44,6 +44,6 @@ class ClearEvents implements ShouldQueue
         Subscriber::where('user_id', $this->user->id)->truncate();
         Event::where('user_id', $this->user->id)->truncate();
 
-        Cache::clear();
+        Cache::tags('events:' . $this->user->id)->flush();
     }
 }
