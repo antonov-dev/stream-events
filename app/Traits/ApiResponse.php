@@ -15,7 +15,7 @@ trait ApiResponse
      */
     protected function success(array $data = [], string $message = '', int $code = 200): JsonResponse
     {
-        return $this->response('Success', $code, $message, $data);
+        return $this->response('success', $code, $message, $data);
     }
 
     /**
@@ -27,7 +27,7 @@ trait ApiResponse
      */
     protected function error(array $data = [], string $message = '', int $code = 500): JsonResponse
     {
-        return $this->response('Success', $code, $message, $data);
+        return $this->response('error', $code, $message, $data);
     }
 
     /**

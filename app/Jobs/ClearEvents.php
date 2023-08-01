@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 
 class ClearEvents implements ShouldQueue
 {
@@ -42,5 +43,7 @@ class ClearEvents implements ShouldQueue
         MerchSale::where('user_id', $this->user->id)->truncate();
         Subscriber::where('user_id', $this->user->id)->truncate();
         Event::where('user_id', $this->user->id)->truncate();
+
+        Cache::clear();
     }
 }

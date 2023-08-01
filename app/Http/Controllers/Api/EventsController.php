@@ -26,7 +26,9 @@ class EventsController extends Controller
         $key = 'events:' . $request->user()->id . ':' . $request->last . ':' . $request->limit;
         $ttl = 5 * 60;
 
-        $result = Cache::remember($key, $ttl, function () use ($request){
+        $result = Cache::remember($key, $ttl, function () use ($request) {
+
+            // Retrieve events from events table
             $events = Event::where('user_id', $request->user()->id)
                 ->whereRaw('created_at > FROM_UNIXTIME("'.$request->last.'")')
                 ->orderBy('created_at', 'asc')
@@ -35,15 +37,22 @@ class EventsController extends Controller
 
             $groupedEvents = $events->groupBy('eventable_type');
 
+            // Retrieve related event instances by ids
             foreach ($groupedEvents as $model => $instances) {
                 $groupedEvents[$model] = $this->populate($model, $instances->pluck('eventable_id')->all());
             }
 
+            // Add related event instance and prepare for json output
             return $events->map(function ($item) use ($groupedEvents) {
                 $item->eventable = $groupedEvents[$item->eventable_type][$item->eventable_id];
                 return new EventResource($item);
             })->all();
         });
+
+        // Remove cache for first run when seeding is not finished yet
+        if(!$result) {
+            Cache::forget($key);
+        }
 
         return $this->success($result);
     }
