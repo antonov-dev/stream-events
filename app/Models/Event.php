@@ -17,6 +17,8 @@ class Event extends Model
     protected $fillable = [
         'is_read',
         'user_id',
+        'eventable_type',
+        'eventable_id',
         'created_at',
         'updated_at'
     ];
