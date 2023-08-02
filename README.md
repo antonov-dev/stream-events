@@ -37,7 +37,7 @@ I've done authentication using Laravel Sanctum package with cookie based authent
 But according to this: “Be sure to use REST API calls from the frontend side to call the backend.” maybe by this, you mean stateless API which will use `access_token`/`refresh_token` or JWT for authentication purposes. But I’m not sure :) My reasoning was:
 
 - I still have to keep tokens in cookies, because storing secure data in localStorage is not a good idea due to the XSS vulnerability.
-- As I know, there aren't many good solutions for how to make authentication for SPA in a stateless manner and one of the best is to use Auth JavaScript SDK and then get tokens from API. But it will increase time for development of the frontend part.
+- As I know, there aren't many good solutions for how to make authentication for SPA in a stateless manner with Socialite flow and one of the best is to use Auth JavaScript SDK and then get tokens from API. But it will increase time for development of the frontend part.
 - According to this: “The main focus of this assignment is the Backend implementation” - I don’t have to spend a lot of time on frontend.
 
 So I decided that for current project requirements Laravel Sanctum with cookie based authentication is the best choice
