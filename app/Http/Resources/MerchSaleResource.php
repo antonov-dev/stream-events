@@ -17,7 +17,7 @@ class MerchSaleResource extends JsonResource
         return [
             'name' => $this->name,
             'amount' => $this->amount,
-            'price' => $this->price,
+            'price' => (float) $this->price,
             'currency' => $this->currency
         ];
     }

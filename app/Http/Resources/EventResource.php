@@ -21,7 +21,7 @@ class EventResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'type' => Str::snake(array_pop($type)),
-            'is_read' => $this->is_read,
+            'is_read' => (bool) $this->is_read,
             'created_at' => $this->created_at->toDateTimeString(),
             'created_timestamp' => $this->created_at->timestamp,
             'eventable' => $this->eventable

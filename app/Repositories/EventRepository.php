@@ -17,7 +17,7 @@ class EventRepository
     /**
      * @var int $ttl
      */
-    protected int $ttl;
+    protected int $ttl = 5 * 10;
 
     /**
      * Set user
@@ -88,14 +88,18 @@ class EventRepository
      * Update event instance
      * @param int $id
      * @param array $data
-     * @return void
+     * @return bool
      */
     public function update(int $id, array $data)
     {
-        Event::where('id', $id)->update($data);
+        $result = Event::where('id', $id)
+            ->where('user_id', $this->user->id)
+            ->update($data);
 
         // Remove cached data for user
         Cache::tags('events:' . $this->user->id)->flush();
+
+        return (bool) $result;
     }
 
     /**

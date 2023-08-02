@@ -15,8 +15,7 @@ class DonationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'amount' => $this->amount,
+            'amount' => (float) $this->amount,
             'message' => $this->message,
             'currency' => $this->currency
         ];

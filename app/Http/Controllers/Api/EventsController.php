@@ -35,7 +35,10 @@ class EventsController extends Controller
         $this->eventRepository->setUser($request->user())
             ->setTTL(5 * 60);
 
-        return $this->success($this->eventRepository->getList($request->last, $request->limit));
+        return $this->success($this->eventRepository->getList(
+            $request->input('last', 0),
+            $request->input('limit', 100)
+        ));
     }
 
     /**
@@ -48,10 +51,12 @@ class EventsController extends Controller
     {
         $request->validated($request->all());
 
-        $this->eventRepository
+        $result = $this->eventRepository
             ->setUser($request->user())
             ->update($id, $request->only(['is_read']));
 
-        return $this->success([], 'Event successfully updated');
+        return $result
+            ? $this->success([], 'Event successfully updated')
+            : $this->error([], 'Event not found', 404);
     }
 }
