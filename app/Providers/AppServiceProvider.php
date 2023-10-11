@@ -14,14 +14,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
         $this->app->bind(CurrencyConverter::class, function () {
             return new SimpleCurrencyConverter([
                 Currency::EUR => [
@@ -35,5 +27,13 @@ class AppServiceProvider extends ServiceProvider
                 ]
             ]);
         });
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        //
     }
 }
